@@ -124,7 +124,7 @@ body {
     text-align: center;
 }
 
-.add__type {
+.select {
     width: 55px;
     border: 1px solid #e7e7e7;
     height: 44px;
@@ -147,7 +147,8 @@ body {
     margin-right: 10px;
     border-radius: 5px;
     transition: border 0.3s;
-}
+    }
+
 
 .add__description { width: 400px;}
 .add__value { width: 100px;}
@@ -166,7 +167,7 @@ body {
 
 .add__btn:active { transform: translateY(2px); }
 
-.add__type:focus,
+.select:focus,
 .add__description:focus,
 .add__value:focus {
     outline: none;

@@ -51,6 +51,8 @@ var budgetController = (function() {
         budget: 0,
         percentage: -1
     };
+
+    var curRates;
     
     
     return {
@@ -160,8 +162,37 @@ var budgetController = (function() {
         
         testing: function() {
             console.log(data);
+        },
+
+        getRates: function() {
+            //API
+            curRates = {};
+            fetch('https://api.exchangeratesapi.io/latest')
+            .then(response => response.json())
+            .then(function(data) {
+            curRates.USD = data.rates.USD
+            curRates.GBP = data.rates.GBP
+        })
+        /*
+        {
+            GBP: 0.882,
+            USD: 1.2084
+        }
+        */
+        },
+
+        toEuro: function(cur, amount){
+            //amount is in the currencie cur
+            rate = curRates[cur];
+            if(rate){
+                return amount/rate;
+            } else {
+                return amount;
+            }
         }
     };
+
+    
     
 })();
 
@@ -172,9 +203,10 @@ var budgetController = (function() {
 var UIController = (function() {
     
     var DOMstrings = {
-        inputType: '.add__type',
+        inputType: 'select',
         inputDescription: '.add__description',
         inputValue: '.add__value',
+        inputCurrency: 'currency',
         inputBtn: '.add__btn',
         incomeContainer: '.income__list',
         expensesContainer: '.expenses__list',
@@ -184,7 +216,8 @@ var UIController = (function() {
         percentageLabel: '.budget__expenses--percentage',
         container: '.container',
         expensesPercLabel: '.item__percentage',
-        dateLabel: '.budget__title--month'
+        dateLabel: '.budget__title--month',
+        
     };
     
     
@@ -214,6 +247,7 @@ var UIController = (function() {
         return (type === 'inc' ? '' : '-') + ' ' + int + '.' + dec;
 
     };
+
     
     
     var nodeListForEach = function(list, callback) {
@@ -225,10 +259,11 @@ var UIController = (function() {
     
     return {
         getInput: function() {
+            console.log(document.getElementById(DOMstrings.inputCurrency).value);
             return {
                 type: document.querySelector(DOMstrings.inputType).value, // Will be either inc or exp
                 description: document.querySelector(DOMstrings.inputDescription).value,
-                value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
+                value: budgetController.toEuro(document.getElementById(DOMstrings.inputCurrency).value, parseFloat(document.querySelector(DOMstrings.inputValue).value))
             };
         },
         
@@ -462,6 +497,7 @@ var controller = (function(budgetCtrl, UICtrl) {
                 percentage: -1
             });
             setupEventListeners();
+            budgetController.getRates();
         }
     };
     
