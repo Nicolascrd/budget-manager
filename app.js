@@ -189,6 +189,16 @@ var budgetController = (function() {
             } else {
                 return amount;
             }
+        },
+
+        toSign: function(cur){
+            switch(cur){
+                case "USD":
+                    return " ($)";
+                case "GBP":
+                    return " (£)";
+            }
+            return "";
         }
     };
 
@@ -262,7 +272,7 @@ var UIController = (function() {
             console.log(document.getElementById(DOMstrings.inputCurrency).value);
             return {
                 type: document.querySelector(DOMstrings.inputType).value, // Will be either inc or exp
-                description: document.querySelector(DOMstrings.inputDescription).value,
+                description: document.querySelector(DOMstrings.inputDescription).value + budgetController.toSign(document.getElementById(DOMstrings.inputCurrency).value),
                 value: budgetController.toEuro(document.getElementById(DOMstrings.inputCurrency).value, parseFloat(document.querySelector(DOMstrings.inputValue).value))
             };
         },
