@@ -5,4 +5,4 @@ Enter your expenses, your income and watch this month budget update in a nice in
 
 I added a feature to enter expenses and income in different currencies (US dollar and GB pound are available).
 The app converts the amount in euro to sum up everything.
-The rate is updated thank to the api echangeratesapi.io
+The rate is updated thanks to the api available here : https://exchangeratesapi.io/
